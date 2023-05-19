@@ -1,0 +1,8 @@
+/.metadata/
+/.jxbrowser.userdata/
+/dvt/
+/RemoteSystemsTempFiles/
+/.tempFiles/
+
+**/.settings/*
+**/Debug/*
