@@ -1,9 +1,15 @@
 #include <msp430g2553.h>
 
 //PX.x Puerto X->pORT1 o Port2 ,x->pin
-#define pin10 BIT0
-#define pin11 BIT1
-#define pin12 BIT2
+#define pin0 BIT0
+#define pin1 BIT1
+#define pin2 BIT2
+#define pin3 BIT3
+#define pin4 BIT4
+#define pin5 BIT5
+#define pin6 BIT6
+#define pin7 BIT7
+
 #define GPIOOFF 0x0000
 /*
 typedef enum{
@@ -26,23 +32,27 @@ typedef enum {
 //};
 void gpioInit(gpioport_t puerto,int pin,gpioinit_t modo);
 void DigitalOutputActivate(gpioport_t puerto,int pin);
-
+void DigitalOutputDeactivate(gpioport_t puerto,int pin);
 int main(void)
 {
     WDTCTL = WDTPW | WDTHOLD;	// stop watchdog timer
 
-    gpioInit(PUERTO1,pin10|pin11|pin12, output);
-    gpioInit(PUERTO2,pin10, output);
+    gpioInit(PUERTO1,pin0|pin1|pin2, output);
+    gpioInit(PUERTO2,pin0, output);
     while(1)
             {
 
-        DigitalOutputActivate(PUERTO1,pin10);
+        DigitalOutputActivate(PUERTO1,pin0|pin1|pin2);
         __delay_cycles(1000000);
-        DigitalOutputActivate(PUERTO1,pin11);
+        DigitalOutputDeactivate(PUERTO1,pin0|pin1);
         __delay_cycles(1000000);
-        DigitalOutputActivate(PUERTO2,pin10);
+        /*
+
+        DigitalOutputActivate(PUERTO1,pin1);
         __delay_cycles(1000000);
-        P2OUT=0;
+        DigitalOutputActivate(PUERTO2,pin0);
+        __delay_cycles(1000000);
+        P2OUT=0;*/
             }
 }
 
@@ -87,4 +97,20 @@ void DigitalOutputActivate(gpioport_t puerto,int pin){
         P2OUT=pin;
     }
 }
+//Apaga el pin pasado como parametro, si quiero apagar varios hago un "OR"
+void DigitalOutputDeactivate(gpioport_t puerto,int pin){
+    if(puerto==PUERTO1){
+            P1OUT=P1OUT&(~pin);
+        }
+        else if(puerto==PUERTO2){
+            P2OUT=P1OUT&(~pin);
+        }
+
+
+}
+
+
+
+
+
 
