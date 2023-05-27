@@ -33,34 +33,29 @@ typedef enum {
 void gpioInit(gpioport_t puerto,int pin,gpioinit_t modo);
 void DigitalOutputActivate(gpioport_t puerto,int pin);
 void DigitalOutputDeactivate(gpioport_t puerto,int pin);
-
+int DigitalReadInput(gpioport_t puerto,int pin);
+int aux=0;
 int main(void)
 {
     WDTCTL = WDTPW | WDTHOLD;	// stop watchdog timer
 
     //gpioInit(PUERTO1,pin0|pin1|pin2|pin6, output);
     //gpioInit(PUERTO2,pin0, output);
-    gpioInit(PUERTO1,pin3, input);
+    gpioInit(PUERTO1,pin5, input);
     gpioInit(PUERTO1,pin6, output);
-   /*
-    P1REN=0; //registro indica habilitación de resistencia pull-up y pull-down
-    P1REN|=BIT3; //P1.3 habilita resistencia
-    P1SEL=0; //vinculación a gpio
-    P1SEL2=0; //vinculación a GPIO
-    P1OUT=0; //Registro para entradas indica 1=pull-up 0=pull-down si PxREN=1 en el pin
-    P1OUT|=BIT3; //Registro para las salidas que indica el nivel del pin 1=3.3V 0=0V
-*/
 
     while(1)
             {
 
-       DigitalOutputActivate(PUERTO1,pin0|pin1|pin2);
-       __delay_cycles(1000000);
-       DigitalOutputDeactivate(PUERTO1,pin0|pin1);
-       __delay_cycles(1000000);
+      //DigitalOutputActivate(PUERTO1,pin0|pin1|pin2);
+       //__delay_cycles(1000000);
+      // DigitalOutputDeactivate(PUERTO1,pin0|pin1);
+       //__delay_cycles(1000000);
 
 
-        if ((P1IN&BIT3)==0) //P1.3 está presionado
+        aux=DigitalReadInput(PUERTO1,pin5);
+
+        if (aux!=0) //P1.3 está presionado
                    {
             DigitalOutputActivate(PUERTO1,pin6);
                    }
@@ -98,9 +93,7 @@ if(puerto==PUERTO1){
          default:
              break;
     }
-    //P1OUT=0; //Registro para entradas indica 1=pull-up 0=pull-down si PxREN=1 en el pin
-    //P1OUT|=pin; //Registro para las salidas que indica el nivel del pin 1=3.3V 0=0V
-                       //P1.3 tiene pull-up y P1.0 =3.3V P1.6=0V;
+
 }
 else if(puerto==PUERTO2){
     switch(modo){
@@ -140,6 +133,15 @@ void DigitalOutputDeactivate(gpioport_t puerto,int pin){
 
 //Funciones para las entradas y falta la iniclizacion de los pines
 
+int DigitalReadInput(gpioport_t puerto,int pin){
+    if (puerto==PUERTO1){
+        return P1IN&pin;
+    }
+    else if (puerto==PUERTO2){
+        return P2IN&pin;
+    }
+    return 0;
+}
 
 
 
