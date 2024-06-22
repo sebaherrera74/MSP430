@@ -32,13 +32,8 @@ typedef enum {
     input
 }gpioinit_t ;
 
-/*
- * Funcion que inicializa el puerto
- *
- */
+
 void gpioInit(gpioport_t puerto,int pin,gpioinit_t modo);
-
-
 void DigitalOutputActivate(gpioport_t puerto,int pin);
 void DigitalOutputDeactivate(gpioport_t puerto,int pin);
 bool DigitalReadInput(gpioport_t puerto,int pin);

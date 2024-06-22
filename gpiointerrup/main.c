@@ -5,7 +5,9 @@
 
 #include <msp430g2553.h>
 #include "gpio.h"
-
+/*Alarma , el problema consiste en detectar si hubo una interrupcion en el P1.5
+ * si sucede eso activa un pin de salida en nivel alto
+ */
 #define DBOTON1 P1DIR
 #define RBOTON1 P1REN
 #define SBOTON1 P1SEL
@@ -68,18 +70,13 @@ int actualizarRESET=0;
 
 int main(void)
 {
-    unsigned char columna=0,fila=0;
-    const char* estadoLED[2]={"Apagado ","Prendido"};
 
     WDTCTL = WDTPW | WDTHOLD;   // stop watchdog timer
-    //Conf_Reloj(); //conf de reloj 16 MHz, SMCLK y MCLK
-    //4 bits , 2 lineas, 5x8 puntos, incr cursor
-    //Conf_LCD1602();//configuracion de la pantalla LCD1602
 
-    DBOTON1&=~BOTON1; //configura el boton1 como entrada P1.6
-    RBOTON1&=~BOTON1; //boton1 sin resistencia interna
-    SBOTON1&=~BOTON1;
-    S2BOTON1&=~BOTON1;
+    DBOTON1&=BOTON1; //configura el boton1 como entrada P1.5
+    RBOTON1&=BOTON1; //boton1 sin resistencia interna
+    SBOTON1&=BOTON1;
+    S2BOTON1&=BOTON1;
 
     DBOTON2&=~BOTON2; //configura el boton2 como entrada P2.3
     RBOTON2&=~BOTON2; //boton2 sin resistencia interna
@@ -101,7 +98,7 @@ int main(void)
     EBOTON1|=BOTON1; //habilita las interrupciones en P1.6 y P2.3
     EBOTON2|=BOTON2;
     EBOTON3|=BOTON3;
-    ESBOTON1|=BOTON1; //interrupcion por flanco de bajada
+    ESBOTON1&=BOTON1; //interrupcion por flanco de bajada
     ESBOTON2|=BOTON2;
     ESBOTON3|=BOTON3;
     IBOTON1&=~BOTON1; //reinicia cualquier interrupcion pendiente

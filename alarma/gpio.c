@@ -33,8 +33,6 @@ if(puerto==PUERTO1){
             P1OUT=0;
             P1OUT|=pin;
             break;
-
-
          default:
              break;
     }
